@@ -1,32 +1,57 @@
-# React + TypeScript + Vite
+# OmniHex - Universal Binary & Hex File Format Converter
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+OmniHex is a modern, high-performance, sleek, and lightweight web application designed for converting microcontroller, FPGA, and embedded binary files between various formats.
 
-Currently, two official plugins are available:
+![OmniHex](https://img.shields.shields.io/badge/License-MIT-blue.svg)
+![React](https://img.shields.shields.io/badge/React-19-cyan.svg)
+![TypeScript](https://img.shields.shields.io/badge/TypeScript-5.0-blue.svg)
+![TailwindCSS](https://img.shields.shields.io/badge/TailwindCSS-v4-purple.svg)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🌟 Key Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **100% Client-Side Privacy**: All file parsing, transformation, and generation are computed locally within your browser using Web APIs. No file content is ever uploaded to a server.
+- **Supported Formats**:
+  - **Intel HEX** (`.hex`, `.ihex`, `.mcs`) — 8-bit, 16-bit, and 32-bit (INHEX32 record types 00, 01, 02, 03, 04, 05).
+  - **Motorola S-Record** (`.srec`, `.s19`, `.s28`, `.s37`, `.mot`) — S0, S1/S2/S3 data records, S7/S8/S9 termination vectors.
+  - **Raw Binary** (`.bin`) — Direct byte streams with customizable target base addresses.
+  - **Hex String / Text** (`.txt`) — Formatted plain-text hex strings (e.g., `0x12 0x34` or `1234ABCD`).
+  - **C/C++ Byte Array** (`.h`, `.c`) — Standard C header array syntax (`const uint8_t data[] = { ... }`).
+  - **Texas Instruments TI-TXT** (`.txt`, `.ti`) — MSP430/DSP text format with `@address` blocks.
+  - **Verilog VMEM** (`.mem`, `.vh`) — FPGA ROM/RAM initialization file format (`readmemh`).
+- **Interactive Memory Map Visualizer**: Visual bar graph showing mapped data blocks vs unmapped gaps, memory span, total bytes, and entry point vectors.
+- **Paginated Hex & ASCII Inspector**: Real-time interactive inspection of raw binary bytes with ASCII representations.
+- **Advanced Parameters**:
+  - Address Offset Shift (+N / -N).
+  - Gap Filling Padding Bytes (`0xFF` Flash Erased State default or `0x00`).
+  - Endian Byte Swapping (16-bit or 32-bit byte reversal).
+- **Preset Test Samples**: Built-in 1-click test samples (STM32 Firmware, SREC Bootloader, EEPROM Config, Verilog ROM) for instant evaluation.
 
-## Expanding the Oxlint configuration
+---
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## 🛠️ Quick Start
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+# Clone the repository
+git clone https://github.com/metacity9/hex_converter.git
+cd hex_converter
+
+# Install dependencies
+npm install
+
+# Start local dev server
+npm run dev
+
+# Build production bundle
+npm run build
+
+# Preview production build
+npm run preview
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+---
+
+## 📄 License
+
+MIT License
