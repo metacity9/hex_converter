@@ -92,10 +92,10 @@ export const DropZone: React.FC<DropZoneProps> = ({
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
           onClick={() => fileInputRef.current?.click()}
-          className={`relative border-2 border-dashed rounded-2xl p-8 lg:p-12 text-center cursor-pointer transition-all duration-300 ${
+          className={`relative border-2 border-dashed rounded-3xl p-10 lg:p-14 text-center cursor-pointer transition-all duration-300 ${
             isDragging
               ? 'border-cyan-400 bg-cyan-950/30 scale-[1.01] shadow-2xl shadow-cyan-500/20'
-              : 'border-slate-700/80 hover:border-cyan-500/60 bg-slate-900/40 hover:bg-slate-900/70'
+              : 'border-slate-700/80 hover:border-cyan-500/60 bg-slate-900/50 hover:bg-slate-900/80'
           }`}
         >
           <input
@@ -105,49 +105,47 @@ export const DropZone: React.FC<DropZoneProps> = ({
             className="hidden"
           />
 
-          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 flex items-center justify-center text-cyan-400 shadow-lg group-hover:scale-110 transition-transform">
-            <UploadCloud className="w-8 h-8" />
+          <div className="w-20 h-20 mx-auto mb-5 rounded-3xl bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/80 flex items-center justify-center text-cyan-400 shadow-xl group-hover:scale-110 transition-transform">
+            <UploadCloud className="w-10 h-10" />
           </div>
 
-          <h3 className="text-lg font-semibold text-slate-100 mb-1">
-            변환할 바이너리/HEX 파일을 드래그 앤 드롭하세요
+          <h3 className="text-xl sm:text-2xl font-bold text-slate-100 mb-2">
+            변환할 파일 선택 또는 드래그 앤 드롭
           </h3>
-          <p className="text-xs text-slate-400 mb-6 max-w-md mx-auto">
-            Intel HEX (`.hex`), Motorola S-Record (`.s19`), Raw Binary (`.bin`), C-Array (`.c`), TI-TXT, Verilog VMEM 지원
+          <p className="text-sm text-slate-400 mb-8 max-w-lg mx-auto">
+            Intel HEX, Motorola S-Record, Raw BIN, C-Array, TI-TXT, Verilog VMEM 등 지원
           </p>
 
-          <button className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium text-xs shadow-lg shadow-cyan-500/25 transition-all">
-            내 컴퓨터에서 파일 선택
+          <button className="px-7 py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-sm shadow-xl shadow-cyan-500/25 transition-all">
+            내 컴퓨터에서 파일 열기
           </button>
         </div>
       ) : (
-        /* Loaded File Card */
-        <div className="glass-panel rounded-2xl p-5 border border-cyan-500/30 shadow-xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-full blur-2xl pointer-events-none" />
-
-          <div className="flex items-start justify-between">
-            <div className="flex items-start space-x-4">
-              <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 flex-shrink-0">
-                <FileCode className="w-6 h-6" />
+        /* Loaded File Card - Ultra Clean */
+        <div className="glass-panel rounded-3xl p-6 border border-cyan-500/40 shadow-xl relative overflow-hidden space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="w-14 h-14 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 flex-shrink-0">
+                <FileCode className="w-7 h-7" />
               </div>
               <div>
-                <div className="flex items-center space-x-2 flex-wrap gap-y-1">
-                  <h4 className="text-base font-bold text-slate-100">
+                <div className="flex items-center space-x-3 flex-wrap gap-y-1">
+                  <h4 className="text-lg font-extrabold text-slate-100">
                     {currentFile.name}
                   </h4>
                   {activeFormatMeta && (
-                    <span className="px-2.5 py-0.5 text-xs font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 rounded-full flex items-center space-x-1">
-                      <CheckCircle2 className="w-3 h-3 text-cyan-400" />
+                    <span className="px-3 py-1 text-xs font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 rounded-full flex items-center space-x-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
                       <span>{activeFormatMeta.name}</span>
                     </span>
                   )}
                 </div>
 
-                <div className="flex items-center space-x-4 text-xs text-slate-400 mt-1">
-                  <span>크기: {(currentFile.content.length / 1024).toFixed(2)} KB ({currentFile.content.length.toLocaleString()} Bytes)</span>
+                <div className="flex items-center space-x-4 text-xs sm:text-sm text-slate-400 mt-1 font-mono">
+                  <span>{(currentFile.content.length / 1024).toFixed(2)} KB ({currentFile.content.length.toLocaleString()} Bytes)</span>
                   {parsedBinary && (
                     <span>
-                      주소 범위: 0x{parsedBinary.minAddress.toString(16).padStart(8, '0').toUpperCase()} ~ 0x{parsedBinary.maxAddress.toString(16).padStart(8, '0').toUpperCase()}
+                      주소: 0x{parsedBinary.minAddress.toString(16).padStart(8, '0').toUpperCase()} ~ 0x{parsedBinary.maxAddress.toString(16).padStart(8, '0').toUpperCase()}
                     </span>
                   )}
                 </div>
@@ -156,28 +154,28 @@ export const DropZone: React.FC<DropZoneProps> = ({
 
             <button
               onClick={onClearFile}
-              className="p-2 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-colors"
-              title="파일 삭제"
+              className="p-2.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-2xl transition-colors"
+              title="파일 삭제 및 새로 선택"
             >
-              <X className="w-5 h-5" />
+              <X className="w-6 h-6" />
             </button>
           </div>
 
           {/* Format auto-detect override control */}
-          <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
+          <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-xs sm:text-sm">
             <div className="flex items-center space-x-2">
-              <span className="text-slate-400">자동 감지된 포맷:</span>
-              <span className="text-slate-200 font-semibold">{formatMeta?.name || 'Raw Binary'}</span>
+              <span className="text-slate-400">감지 포맷:</span>
+              <span className="text-slate-100 font-bold">{formatMeta?.name || 'Raw Binary'}</span>
             </div>
 
             <div className="flex items-center space-x-2">
-              <span className="text-slate-400">입력 포맷 수동지정:</span>
+              <span className="text-slate-400">포맷 변경:</span>
               <select
                 value={overrideFormat || ''}
                 onChange={(e) => onOverrideFormatChange(e.target.value ? (e.target.value as BinaryFormat) : null)}
-                className="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1 focus:outline-none focus:border-cyan-500"
+                className="bg-slate-900 border border-slate-700 text-slate-100 text-xs sm:text-sm rounded-xl px-3 py-1.5 focus:outline-none focus:border-cyan-500 font-semibold"
               >
-                <option value="">자동 감지 사용 ({formatMeta?.name || 'Auto'})</option>
+                <option value="">자동 감지 ({formatMeta?.name || 'Auto'})</option>
                 {SUPPORTED_FORMATS.map((f) => (
                   <option key={f.id} value={f.id}>
                     {f.name}
@@ -189,10 +187,10 @@ export const DropZone: React.FC<DropZoneProps> = ({
 
           {/* Warnings list if any */}
           {parsedBinary?.warnings && parsedBinary.warnings.length > 0 && (
-            <div className="mt-3 p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-xs text-amber-300 space-y-1">
-              <div className="flex items-center space-x-1.5 font-semibold text-amber-400">
+            <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-2xl text-xs sm:text-sm text-amber-300 space-y-1">
+              <div className="flex items-center space-x-1.5 font-bold text-amber-400">
                 <AlertTriangle className="w-4 h-4" />
-                <span>파싱 파서 경고 ({parsedBinary.warnings.length}건)</span>
+                <span>파일 파싱 경고 ({parsedBinary.warnings.length}건)</span>
               </div>
               <ul className="list-disc list-inside space-y-0.5 text-slate-300">
                 {parsedBinary.warnings.slice(0, 3).map((w, idx) => (
@@ -206,28 +204,28 @@ export const DropZone: React.FC<DropZoneProps> = ({
 
       {/* Quick Test Presets (For users without immediate files) */}
       {!currentFile && (
-        <div className="glass-card rounded-2xl p-4 border border-slate-800">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold text-slate-300 flex items-center space-x-1.5">
-              <Play className="w-3.5 h-3.5 text-cyan-400" />
-              <span>즉시 테스트 가능한 예제 파일 (1-Click)</span>
+        <div className="glass-card rounded-3xl p-5 border border-slate-800/80">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-sm font-bold text-slate-200 flex items-center space-x-2">
+              <Play className="w-4 h-4 text-cyan-400" />
+              <span>클릭 한번으로 시작하는 예제 테스트 파일</span>
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {samples.map((sample: PresetSample) => (
               <button
                 key={sample.id}
                 onClick={() => onFileLoaded(sample.fileInput)}
-                className="p-3 rounded-xl bg-slate-900/60 hover:bg-cyan-950/40 border border-slate-800 hover:border-cyan-500/50 text-left transition-all group"
+                className="p-4 rounded-2xl bg-slate-900/60 hover:bg-cyan-950/40 border border-slate-800 hover:border-cyan-500/50 text-left transition-all group"
               >
-                <div className="text-xs font-bold text-slate-200 group-hover:text-cyan-300 flex items-center justify-between">
+                <div className="text-sm font-bold text-slate-200 group-hover:text-cyan-300 flex items-center justify-between">
                   <span>{sample.title}</span>
-                  <span className="text-[10px] uppercase font-mono px-1.5 py-0.2 bg-slate-800 text-slate-400 rounded">
+                  <span className="text-xs uppercase font-mono px-2 py-0.5 bg-slate-800 text-slate-400 rounded-lg">
                     {sample.format}
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-400 mt-1 line-clamp-1">
+                <p className="text-xs text-slate-400 mt-1.5 line-clamp-1">
                   {sample.description}
                 </p>
               </button>
