@@ -45,7 +45,7 @@ export const SUPPORTED_FORMATS: FormatMeta[] = [
     id: 'hex_string',
     name: 'Hex String / Text',
     extensions: ['.txt', '.hexstr'],
-    description: 'Formatted plain-text hexadecimal strings (e.g. 0x12, 1234, 0xAB 0xCD)',
+    description: 'Formatted plain-text hexadecimal strings (e.g. 0x12, 0x1234, 0xAB 0xCD)',
     isText: true,
     category: 'hex',
   },
@@ -93,14 +93,20 @@ export interface ParsedBinary {
 }
 
 export interface ConversionOptions {
+  // Memory Transformation Options
   baseAddressShift?: number; // Shift start address by +N or -N
   fillByte?: number; // 0x00 to 0xFF (default 0xFF for unmapped gap spaces)
   byteSwap?: 'none' | 'swap16' | 'swap32'; // Endianness swap
   targetBaseAddress?: number; // Explicit override base address for raw bin or formatted output
+
+  // Detailed Output Formatting Options
+  bytesPerLine?: number; // 1, 4, 8, 12, 16, 32, 64 bytes per line
+  prefix0x?: boolean; // Add '0x' prefix to hex tokens (e.g., 0x12 vs 12)
+  hexGroupSize?: 1 | 2 | 4; // Byte grouping (1 byte: 0x12, 2 bytes: 0x1234, 4 bytes: 0x12345678)
+  delimiter?: 'space' | 'comma' | 'comma_space' | 'none' | 'newline'; // Token separator
+  hexCase?: 'upper' | 'lower'; // Upper (0xAB) vs Lower (0xab)
   cArrayName?: string; // Variable name for C array export
-  cBytesPerLine?: number; // Formatting: number of hex values per line
-  tiTxtHeaderAddress?: boolean;
-  verilogAddrPrefix?: boolean;
+  cType?: 'uint8_t' | 'uint16_t' | 'uint32_t'; // C array data type
 }
 
 export interface FileDataInput {

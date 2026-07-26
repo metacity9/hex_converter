@@ -50,7 +50,6 @@ export function convertBinary(
 ): ConvertResult {
   const parsed = parseFile(input, inputFormatOverride, options.targetBaseAddress || 0);
 
-  // Apply memory transformations (address offset, byte swap)
   let memoryBuffer = new MemoryBuffer(parsed.segments, parsed.entryPoint);
   if (options.baseAddressShift || options.byteSwap) {
     memoryBuffer = memoryBuffer.applyOptions(options);
@@ -62,14 +61,16 @@ export function convertBinary(
   let binaryBuffer: Uint8Array | undefined = undefined;
   let mimeType = 'text/plain';
 
+  const lineChunkSize = options.bytesPerLine ?? 16;
+
   switch (targetFormat) {
     case 'intel_hex':
       extension = '.hex';
-      textContent = writeIntelHex(memoryBuffer);
+      textContent = writeIntelHex(memoryBuffer, lineChunkSize);
       break;
     case 'srec':
       extension = '.srec';
-      textContent = writeSRecord(memoryBuffer);
+      textContent = writeSRecord(memoryBuffer, lineChunkSize);
       break;
     case 'raw_bin':
       extension = '.bin';
@@ -78,19 +79,19 @@ export function convertBinary(
       break;
     case 'hex_string':
       extension = '.txt';
-      textContent = writeHexString(memoryBuffer, options.cBytesPerLine || 16, true);
+      textContent = writeHexString(memoryBuffer, options);
       break;
     case 'c_array':
       extension = '.h';
-      textContent = writeCArray(memoryBuffer, options.cArrayName || `${baseName.replace(/[^a-zA-Z0-9_]/g, '_')}_data`, options.cBytesPerLine || 12);
+      textContent = writeCArray(memoryBuffer, options);
       break;
     case 'ti_txt':
       extension = '.txt';
-      textContent = writeTITxt(memoryBuffer, options.cBytesPerLine || 16);
+      textContent = writeTITxt(memoryBuffer, lineChunkSize);
       break;
     case 'verilog_vmem':
       extension = '.mem';
-      textContent = writeVerilogMem(memoryBuffer, options.cBytesPerLine || 16);
+      textContent = writeVerilogMem(memoryBuffer, options);
       break;
   }
 

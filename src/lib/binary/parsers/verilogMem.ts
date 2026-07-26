@@ -1,4 +1,4 @@
-import type { ParsedBinary, MemorySegment } from '../types';
+import type { ParsedBinary, MemorySegment, ConversionOptions } from '../types';
 import { MemoryBuffer } from '../MemoryBuffer';
 
 export function parseVerilogMem(text: string, fileName?: string): ParsedBinary {
@@ -54,16 +54,33 @@ export function parseVerilogMem(text: string, fileName?: string): ParsedBinary {
   };
 }
 
-export function writeVerilogMem(memoryBuffer: MemoryBuffer, bytesPerLine = 16): string {
+export function writeVerilogMem(memoryBuffer: MemoryBuffer, options: ConversionOptions = {}): string {
   const segments = memoryBuffer.getSegments();
+  const bytesPerLine = options.bytesPerLine ?? 16;
+  const wordSize = options.hexGroupSize ?? 1; // 1, 2, or 4 bytes per word
+  const isUpper = (options.hexCase || 'upper') === 'upper';
+
   const lines: string[] = ['// Verilog Memory Initialization File (readmemh)'];
 
   for (const seg of segments) {
-    lines.push(`@${seg.startAddress.toString(16).padStart(8, '0').toUpperCase()}`);
+    const addrHex = seg.startAddress.toString(16).padStart(8, '0');
+    lines.push(`@${isUpper ? addrHex.toUpperCase() : addrHex.toLowerCase()}`);
+
     for (let i = 0; i < seg.data.length; i += bytesPerLine) {
-      const chunk = seg.data.subarray(i, i + bytesPerLine);
-      const hexTokens = Array.from(chunk).map(b => b.toString(16).padStart(2, '0').toUpperCase());
-      lines.push(hexTokens.join(' '));
+      const lineChunk = seg.data.subarray(i, Math.min(seg.data.length, i + bytesPerLine));
+      const tokens: string[] = [];
+
+      for (let w = 0; w < lineChunk.length; w += wordSize) {
+        const wordBytes = lineChunk.subarray(w, Math.min(lineChunk.length, w + wordSize));
+        let wordHex = '';
+        for (let b = 0; b < wordBytes.length; b++) {
+          const bHex = wordBytes[b].toString(16).padStart(2, '0');
+          wordHex += isUpper ? bHex.toUpperCase() : bHex.toLowerCase();
+        }
+        tokens.push(wordHex);
+      }
+
+      lines.push(tokens.join(' '));
     }
   }
 
